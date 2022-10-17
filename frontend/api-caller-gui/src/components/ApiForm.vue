@@ -18,6 +18,8 @@
             <select id="apimethod" name="apimethod" v-model="apiMethod">
               <option value="GET">GET</option>
               <option value="POST">POST</option>
+              <option value="PUT">PUT</option>
+              <option value="DELETE">DELETE</option>
             </select>
             <input
               id="service-endpoint"
@@ -57,7 +59,7 @@
           </table>
           <!-- <button  type="button" class="btn btn-primary" @click="addElement">New Row </button> -->
         </div>
-
+        
         <div class="form-control">
           <h2>Execution</h2>
           <div>
@@ -65,7 +67,7 @@
               id="execute-now"
               name="execute"
               type="radio"
-              value="true"
+              :value="true"
               v-model="execute"
             />
             <label for="execute-now">Execute Now</label>
@@ -75,7 +77,7 @@
               id="execute-later"
               name="execute"
               type="radio"
-              value="false"
+              :value="false"
               v-model="execute"
             />
             <label for="execute-later">Schedule</label>
@@ -87,6 +89,7 @@
             id="date-picker"
             type="datetime-local"
             name="date-picker"
+            :disabled="execute"
             v-model="datetime"
           />
         </div>
@@ -108,12 +111,13 @@
     <div class="right">
       <div id="responsesection">
         <label>Response</label>
-        <textarea
+        <!-- <textarea
           id="response-body"
           name="response-body"
           type="text"
           placeholder="Response Body"
-        ></textarea>
+        ></textarea> -->
+          <!-- <p>{{responsedata}}</p> -->
       </div>
     </div>
   </div>
@@ -121,6 +125,8 @@
 
 <script>
 import axios from "axios";
+import { v4 as uuidv4 } from 'uuid';
+
 export default {
   data() {
     return {
@@ -135,11 +141,27 @@ export default {
     };
   },
   methods: {
-    submitForm() {
-      var now = new Date(this.datetime);
-      var DateisoString = now.toISOString();
+    async submitForm() {
+      // this.serviceName = "Test";
+      // this.serviceEndpoint = "https://jsonplaceholder.typicode.com/todos/1";
+      // this.apiMethod = "GET";
+      // // this.execute = '';
+      // this.headerKey = "Content-Type";
+      // this.headerValue = "application/json; charset=UTF-8";
+      // this.requestBody = `{ "title": "delectus aut autem","completed": false}`;
+      
+      let when,DateisoString
+        
+      if (this.execute === true){
+        when = "now"
+        DateisoString = new Date().toISOString();
+      }else{
+        when  = "later"
+        DateisoString = new Date(this.datetime).toISOString();
+      }
 
       let call = {
+        serviceId:uuidv4(),
         serviceName: this.serviceName,
         apiMethod: this.apiMethod,
         apiEndpoint: this.serviceEndpoint,
@@ -148,27 +170,22 @@ export default {
         apiExecuteNow: this.execute,
         dateTime: DateisoString,
       };
-      console.log(typeof call.apiBody);
-      axios
-        .post(
-          "http://localhost:3000/executelater",
-          { call },
-          {
-            headers: { "Content-Type": "application/json" },
-          }
+      console.log("status",call.serviceId)
+      
+      let postrequest = await axios.post("http://localhost:3000/schedule/"+when,{ call },{headers: { "Content-Type": "application/json" }})
+      
+      if(postrequest.status === 201){
+        let getrequest = await axios.get('http://localhost:3000/calls')
+        let getresponse = getrequest.data.apiCalls.find(ele=>  ele.serviceId === call.serviceId
         )
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-      this.serviceName = "";
-      this.serviceEndpoint = "https://jsonplaceholder.typicode.com/todos/1";
+        console.log("Response",JSON.stringify(getresponse.apiResponse, null, 4))
+      }
+      this.serviceName = "Test";
+      this.serviceEndpoint = "https://jsonplaceholder.typicode.com/todos/5";
       this.apiMethod = "GET";
       this.execute = '';
       this.headerKey = "Content-Type";
-      this.headerValue = "application/json";
+      this.headerValue = "application/json; charset=UTF-8";
       this.requestBody = `{ "title": "delectus aut autem","completed": false}`;
     },
     addElement() {

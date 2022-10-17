@@ -8,10 +8,11 @@ mongoose.connect('mongodb+srv://admin:admin@apicallmanager.gslzllt.mongodb.net/?
 
 const app = express()
 const port = 3000
-const indexRoutes = require('./routes/index')
+// const indexRoutes = require('./routes/index')
 const getAllCalls = require('./routes/allCalls')
-const executeNowRoutes = require('./routes/executeNow')
-const executeLaterRoutes = require('./routes/executeLater');
+const scheduleCall = require('./routes/scheduleCall')
+// const executeNowRoutes = require('./routes/executeNow')
+// const executeLaterRoutes = require('./routes/executeLater');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -32,18 +33,22 @@ app.use(bodyParser.json());
 //         "dataTime": "2019-02-03T06:48:07"
 //     }
 
-app.use(cors()) // Use this after the variable declaration
+app.use(cors())
+app.use(express.json());
 
-app.use('/', indexRoutes);
+
+//Routes
+// app.use('/', indexRoutes);
 app.use('/calls',getAllCalls)
-app.use('/callnow', executeNowRoutes);
-app.use('/executelater',executeLaterRoutes)
+app.use('/schedule',scheduleCall)
+// app.use('/callnow', executeNowRoutes);
+// app.use('/executelater',executeLaterRoutes)
 // app.get('/',(req,res)=>{
 //     res.send('Hello world from Shariq!!!')
 // })
 
 
-app.use(express.json());
+
 
 
 app.listen(port, () => {

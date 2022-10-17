@@ -1,7 +1,7 @@
 const express = require('express');
-const getAllSericeCallsController = require('../controllers/getAllSericeCallsController')
+const getAllServiceCallsController = require('../controllers/getAllServiceCallsController')
 const router = express.Router();
 
-router.get('/', getAllSericeCallsController.getAllCalls);
+router.get('', getAllServiceCallsController.getAllCalls);
 
 module.exports = router;
