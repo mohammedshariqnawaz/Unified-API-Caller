@@ -1,0 +1,312 @@
+<template>
+  <div class="main">
+    <div class="left">
+      <form @submit.prevent="submitForm">
+        <div class="form-control">
+          <label for="service-name">Service Name</label>
+          <input
+            id="service-name"
+            name="service-name"
+            type="text"
+            v-model="serviceName"
+            placeholder="Enter Service Name"
+          />
+        </div>
+        <div class="form-control">
+          <label for="api-details">API Details</label>
+          <div id="api-details-div">
+            <select id="apimethod" name="apimethod" v-model="apiMethod">
+              <option value="GET">GET</option>
+              <option value="POST">POST</option>
+            </select>
+            <input
+              id="service-endpoint"
+              name="service-endpoint"
+              type="text"
+              v-model="serviceEndpoint"
+              placeholder="Enter Service endpoint"
+            />
+          </div>
+        </div>
+
+        <div class="form-control">
+          <label for="headers">Headers</label>
+
+          <!-- <div id="headerpair" v-for="(pair,index) in keyValuePairs" :key="index"> -->
+          <table>
+            <tr>
+              <td>
+                <input
+                  id="header-key"
+                  name="header-key"
+                  type="text"
+                  v-model="headerKey"
+                  placeholder="Enter Key"
+                />
+              </td>
+              <td>
+                <input
+                  id="header-value"
+                  name="header-value"
+                  type="text"
+                  v-model="headerValue"
+                  placeholder="Enter Value"
+                />
+              </td>
+            </tr>
+          </table>
+          <!-- <button  type="button" class="btn btn-primary" @click="addElement">New Row </button> -->
+        </div>
+
+        <div class="form-control">
+          <h2>Execution</h2>
+          <div>
+            <input
+              id="execute-now"
+              name="execute"
+              type="radio"
+              value="true"
+              v-model="execute"
+            />
+            <label for="execute-now">Execute Now</label>
+          </div>
+          <div>
+            <input
+              id="execute-later"
+              name="execute"
+              type="radio"
+              value="false"
+              v-model="execute"
+            />
+            <label for="execute-later">Schedule</label>
+          </div>
+        </div>
+        <div class="form-control">
+          <label for="date-picker">Enter a date and time to schedule:</label>
+          <input
+            id="date-picker"
+            type="datetime-local"
+            name="date-picker"
+            v-model="datetime"
+          />
+        </div>
+        <div class="form-control">
+          <label for="req-body">Enter Request Body in JSON</label>
+          <textarea
+            id="request-body"
+            name="request-body"
+            type="text"
+            v-model="requestBody"
+            placeholder="Enter Body"
+          ></textarea>
+        </div>
+        <div>
+          <button>Submit</button>
+        </div>
+      </form>
+    </div>
+    <div class="right">
+      <div id="responsesection">
+        <label>Response</label>
+        <textarea
+          id="response-body"
+          name="response-body"
+          type="text"
+          placeholder="Response Body"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+export default {
+  data() {
+    return {
+      serviceName: "",
+      serviceEndpoint: "",
+      apiMethod: "GET",
+      execute: '',
+      headerKey: "",
+      headerValue: "",
+      requestBody: "",
+      datetime: null,
+    };
+  },
+  methods: {
+    submitForm() {
+      var now = new Date(this.datetime);
+      var DateisoString = now.toISOString();
+
+      let call = {
+        serviceName: this.serviceName,
+        apiMethod: this.apiMethod,
+        apiEndpoint: this.serviceEndpoint,
+        apiHeaders: [{ key: this.headerKey, value: this.headerValue }],
+        apiBody: this.requestBody,
+        apiExecuteNow: this.execute,
+        dateTime: DateisoString,
+      };
+      console.log(typeof call.apiBody);
+      axios
+        .post(
+          "http://localhost:3000/executelater",
+          { call },
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        )
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      this.serviceName = "";
+      this.serviceEndpoint = "https://jsonplaceholder.typicode.com/todos/1";
+      this.apiMethod = "GET";
+      this.execute = '';
+      this.headerKey = "Content-Type";
+      this.headerValue = "application/json";
+      this.requestBody = `{ "title": "delectus aut autem","completed": false}`;
+    },
+    addElement() {
+      console.log("check");
+      this.ele.push({
+        headerKey: "",
+      });
+    },
+  },
+};
+</script>
+
+<style scoped>
+.main {
+  /* width: 90%; */
+  /* height: auto; */
+  /* background: aqua; */
+  /* margin: auto; */
+  /* padding: 10px;
+   */
+  display: flex;
+}
+
+.left {
+  /* width: 15%; */
+  /* height: 200px; */
+  /* background: red; */
+  flex: 0 0 50%;
+}
+
+.right {
+  flex: 1;
+}
+
+#responsesection {
+  margin: 5rem auto;
+  max-width: 40rem;
+  height: 80%;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  padding: 2rem;
+  background-color: #ffffff;
+}
+
+#response-body {
+  width: 100%;
+  height: 250px;
+  margin-top: 20px;
+}
+form {
+  margin: 5rem auto;
+  max-width: 40rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  padding: 2rem;
+  background-color: #ffffff;
+}
+
+.form-control {
+  margin: 0.5rem 0;
+}
+
+label {
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+input,
+select {
+  display: block;
+  width: 100%;
+  font: inherit;
+  margin-top: 0.5rem;
+}
+
+select {
+  width: auto;
+}
+
+table {
+  width: 100%;
+}
+
+table input {
+  display: inline-block;
+}
+
+#api-details-div input {
+  width: 80%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#api-details-div select {
+  width: 15%;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5%;
+}
+
+#headerpair input {
+  display: inline-block;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  display: inline-block;
+  width: auto;
+  margin-right: 1rem;
+}
+
+input[type="checkbox"] + label,
+input[type="radio"] + label {
+  font-weight: normal;
+}
+
+#request-body {
+  width: 100%;
+  height: 250px;
+}
+
+button {
+  font: inherit;
+  border: 1px solid #0076bb;
+  background-color: #0076bb;
+  color: white;
+  cursor: pointer;
+  padding: 0.75rem 2rem;
+  border-radius: 30px;
+}
+
+button:hover,
+button:active {
+  border-color: #002350;
+  background-color: #002350;
+}
+</style>
