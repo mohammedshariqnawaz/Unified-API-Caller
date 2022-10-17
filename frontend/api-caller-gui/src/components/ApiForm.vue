@@ -172,7 +172,7 @@ export default {
       };
       console.log("status",call.serviceId)
       
-      let postrequest = await axios.post("http://localhost:3000/schedule/"+when,{ call },{headers: { "Content-Type": "application/json" }})
+      let postrequest = await axios.post("http://localhost:3000/schedule/"+when, call ,{headers: { "Content-Type": "application/json" }})
       
       if(postrequest.status === 201){
         let getrequest = await axios.get('http://localhost:3000/calls')

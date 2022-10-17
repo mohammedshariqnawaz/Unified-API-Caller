@@ -1,10 +1,7 @@
-// import mongoose
 const mongoose = require('mongoose');
-
-// extract the schema from that mongoose object
 const Schema = mongoose.Schema;
 
-// create a new post schema
+// create a new service call schema
 const callsSchema = new Schema({
   serviceId: {
     type: String

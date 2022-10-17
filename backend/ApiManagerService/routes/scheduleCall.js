@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const executeNowController = require('../controllers/executeNowController')
-const executeLaterController = require('../controllers/executeLaterController')
+const executeController = require('../controllers/executeController')
 
-router.post('/now', executeNowController.executeServiceCall);
-router.post('/later',executeLaterController.scheduleServiceCall);
+router.post('/now', executeController.executeServiceCall);
+router.post('/later',executeController.scheduleServiceCall);
+
 module.exports = router;

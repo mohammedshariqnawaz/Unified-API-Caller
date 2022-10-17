@@ -1,6 +1,6 @@
 const express = require('express');
-const getAllServiceCallsController = require('../controllers/getAllServiceCallsController')
 const router = express.Router();
+const getAllServiceCallsController = require('../controllers/getAllServiceCallsController')
 
 router.get('', getAllServiceCallsController.getAllCalls);
 
