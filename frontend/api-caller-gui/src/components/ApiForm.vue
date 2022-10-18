@@ -1,131 +1,134 @@
 <template>
-  <div class="main">
-    <div class="left">
-
-      <form @submit.prevent="submitForm">
-        <div class="form-control">
-          <label for="service-name">Service Name</label>
-          <input
-            id="service-name"
-            name="service-name"
-            type="text"
-            v-model="serviceName"
-            placeholder="Enter Service Name"
-          />
-        </div>
-        <div class="form-control">
-          <label for="api-details">API Details</label>
-          <div id="api-details-div">
-            <select id="apimethod" name="apimethod" v-model="apiMethod">
-              <option value="GET">GET</option>
-              <option value="POST">POST</option>
-              <option value="PUT">PUT</option>
-              <option value="DELETE">DELETE</option>
-            </select>
+  <div >
+    <div id="page-name">
+      <h1>Request Page</h1>
+    </div>
+    <div class="main">
+      <div class="left">
+        <form @submit.prevent="submitForm">
+          <div class="form-control">
+            <label for="service-name">Service Name</label>
             <input
-              id="service-endpoint"
-              name="service-endpoint"
+              id="service-name"
+              name="service-name"
               type="text"
-              v-model="serviceEndpoint"
-              placeholder="Enter Service endpoint"
+              v-model="serviceName"
+              placeholder="Enter Service Name"
             />
           </div>
-        </div>
+          <div class="form-control">
+            <label for="api-details">API Details</label>
+            <div id="api-details-div">
+              <select id="apimethod" name="apimethod" v-model="apiMethod">
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+              </select>
+              <input
+                id="service-endpoint"
+                name="service-endpoint"
+                type="text"
+                v-model="serviceEndpoint"
+                placeholder="Enter Service endpoint"
+              />
+            </div>
+          </div>
 
-        <div class="form-control">
-          <label for="headers">Headers</label>
+          <div class="form-control">
+            <label for="headers">Headers</label>
 
-          <table>
-            <tr>
-              <td>
-                <input
-                  id="header-key"
-                  name="header-key"
-                  type="text"
-                  v-model="headerKey"
-                  placeholder="Enter Key"
-                />
-              </td>
-              <td>
-                <input
-                  id="header-value"
-                  name="header-value"
-                  type="text"
-                  v-model="headerValue"
-                  placeholder="Enter Value"
-                />
-              </td>
-            </tr>
-          </table>
-          <!-- <button  type="button" class="btn btn-primary" @click="addElement">New Row </button> -->
-        </div>
-        
-        <div class="form-control">
-          <h2>Execution</h2>
-          <div>
+            <table>
+              <tr>
+                <td>
+                  <input
+                    id="header-key"
+                    name="header-key"
+                    type="text"
+                    v-model="headerKey"
+                    placeholder="Enter Key"
+                  />
+                </td>
+                <td>
+                  <input
+                    id="header-value"
+                    name="header-value"
+                    type="text"
+                    v-model="headerValue"
+                    placeholder="Enter Value"
+                  />
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="form-control">
+            <h2>Execution</h2>
+            <div>
+              <input
+                id="execute-now"
+                name="execute"
+                type="radio"
+                :value="true"
+                v-model="execute"
+              />
+              <label for="execute-now">Execute Now</label>
+            </div>
+            <div>
+              <input
+                id="execute-later"
+                name="execute"
+                type="radio"
+                :value="false"
+                v-model="execute"
+              />
+              <label for="execute-later">Schedule</label>
+            </div>
+          </div>
+          <div class="form-control">
+            <label for="date-picker">Enter a date and time to schedule:</label>
             <input
-              id="execute-now"
-              name="execute"
-              type="radio"
-              :value="true"
-              v-model="execute"
+              id="date-picker"
+              type="datetime-local"
+              name="date-picker"
+              :disabled="execute"
+              v-model="datetime"
             />
-            <label for="execute-now">Execute Now</label>
+          </div>
+          <div class="form-control">
+            <label for="req-body">Enter Request Body in JSON</label>
+            <textarea
+              id="request-body"
+              name="request-body"
+              type="text"
+              v-model="requestBody"
+              placeholder="Enter Body"
+            ></textarea>
           </div>
           <div>
-            <input
-              id="execute-later"
-              name="execute"
-              type="radio"
-              :value="false"
-              v-model="execute"
-            />
-            <label for="execute-later">Schedule</label>
+            <button>Submit</button>
           </div>
-        </div>
-        <div class="form-control">
-          <label for="date-picker">Enter a date and time to schedule:</label>
-          <input
-            id="date-picker"
-            type="datetime-local"
-            name="date-picker"
-            :disabled="execute"
-            v-model="datetime"
-          />
-        </div>
-        <div class="form-control">
-          <label for="req-body">Enter Request Body in JSON</label>
+        </form>
+      </div>
+      <div class="right">
+        <div id="responsesection">
+          <label>Response</label>
           <textarea
-            id="request-body"
-            name="request-body"
+            id="response-body"
+            name="response-body"
             type="text"
-            v-model="requestBody"
-            placeholder="Enter Body"
+            placeholder="Response Body"
+            v-model="response"
           ></textarea>
         </div>
-        <div>
-          <button>Submit</button>
-        </div>
-      </form>
-    </div>
-    <div class="right">
-      <div id="responsesection">
-        <label>Response</label>
-        <textarea
-          id="response-body"
-          name="response-body"
-          type="text"
-          placeholder="Response Body"
-          v-model="response"
-        ></textarea>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import { v4 as uuidv4 } from 'uuid';
+import axios from "axios"; // to handle http requests
+import { v4 as uuidv4 } from "uuid"; // to generate unique id for each service call
 
 export default {
   data() {
@@ -133,17 +136,20 @@ export default {
       serviceName: "",
       serviceEndpoint: "",
       apiMethod: "GET",
-      execute: '',
+      execute: "",
       headerKey: "",
       headerValue: "",
-      requestBody: "",
+      requestBody: "{}",
       datetime: null,
-      response:""
+      response: "",
     };
   },
   methods: {
+    /**
+     * Submit Form and get response if service call has been executed successful
+     *
+     */
     async submitForm() {
-
       //Testing Data
       // this.serviceName = "Test";
       // this.serviceEndpoint = "https://jsonplaceholder.typicode.com/todos/1";
@@ -152,19 +158,22 @@ export default {
       // this.headerKey = "Content-Type";
       // this.headerValue = "application/json; charset=UTF-8";
       // this.requestBody = `{ "title": "delectus aut autem","completed": false}`;
-      
-      let when,DateisoString
-        
-      if (this.execute === true){
-        when = "now"
+
+      try{
+        let when, DateisoString;
+
+      //Decide if the service call is to be executed now or scheduled later
+      if (this.execute === true) {
+        when = "now";
         DateisoString = new Date().toISOString();
-      }else{
-        when  = "later"
+      } else {
+        when = "later";
         DateisoString = new Date(this.datetime).toISOString();
       }
 
+      //Create payload to send with post request to backend
       let call = {
-        serviceId:uuidv4(),
+        serviceId: uuidv4(),
         serviceName: this.serviceName,
         apiMethod: this.apiMethod,
         apiEndpoint: this.serviceEndpoint,
@@ -173,52 +182,59 @@ export default {
         apiExecuteNow: this.execute,
         dateTime: DateisoString,
       };
-      
-      let postrequest = await axios.post("http://localhost:3000/schedule/"+when, call ,{headers: { "Content-Type": "application/json" }})
-      
-      if(postrequest.status === 201){
-        let getrequest = await axios.get('http://localhost:3000/calls')
-        let getresponse = getrequest.data.apiCalls.find(ele=>  ele.serviceId === call.serviceId
-        )
-        console.log("Response",JSON.stringify(getresponse.apiResponse, null, 4))
-        this.response=JSON.stringify(getresponse.apiResponse, null, 4);
+
+      //Send prepared payload to backend
+      let postrequest = await axios.post(
+        "http://localhost:3000/schedule/" + when,
+        call,
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      //If post request is successful then get the response body
+      if (postrequest.status === 201) {
+        let getrequest = await axios.get("http://localhost:3000/calls");
+        let getresponse = getrequest.data.apiCalls.find(
+          (ele) => ele.serviceId === call.serviceId
+        );
+        console.log(
+          "Response",
+          JSON.stringify(getresponse.apiResponse, null, 4)
+        );
+        this.response = JSON.stringify(getresponse.apiResponse, null, 4);
       }
 
-      //Resetting values
-      // this.serviceName = "";
-      // this.serviceEndpoint = "";
-      // this.apiMethod = "";
-      // this.execute = '';
-      // this.headerKey = "";
-      // this.headerValue = "";
-      // this.requestBody = ``;
-      // this.datetime= null;
-    },
-    addElement() {
-      console.log("check");
-      this.ele.push({
-        headerKey: "",
-      });
+      // Resetting values
+      this.serviceName = "";
+      this.serviceEndpoint = "";
+      this.apiMethod = "";
+      this.execute = "";
+      this.headerKey = "";
+      this.headerValue = "";
+      this.requestBody = `{}`;
+      this.datetime = null;
+      }catch(error){
+        console.log("Error while submitting service call, "+error)
+      }
+      
     },
   },
 };
 </script>
 
 <style scoped>
+#page-name {
+  height: 0px;
+}
+
+h1 {
+  text-align: center;
+}
+
 .main {
-  /* width: 90%; */
-  /* height: auto; */
-  /* background: aqua; */
-  /* margin: auto; */
-  /* padding: 10px;
-   */
   display: flex;
 }
 
 .left {
-  /* width: 15%; */
-  /* height: 200px; */
-  /* background: red; */
   flex: 0 0 50%;
 }
 
@@ -229,7 +245,7 @@ export default {
 #responsesection {
   margin: 5rem auto;
   max-width: 40rem;
-  height: 80%;
+  /* height: 50%; */
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   padding: 2rem;
@@ -241,6 +257,7 @@ export default {
   height: 250px;
   margin-top: 20px;
 }
+
 form {
   margin: 5rem auto;
   max-width: 40rem;
@@ -275,14 +292,6 @@ select {
   width: auto;
 }
 
-table {
-  width: 100%;
-}
-
-table input {
-  display: inline-block;
-}
-
 #api-details-div input {
   width: 80%;
   display: inline-block;
@@ -312,11 +321,6 @@ input[type="radio"] + label {
   font-weight: normal;
 }
 
-#request-body {
-  width: 100%;
-  height: 250px;
-}
-
 button {
   font: inherit;
   border: 1px solid #0076bb;
@@ -331,5 +335,9 @@ button:hover,
 button:active {
   border-color: #002350;
   background-color: #002350;
+}
+
+#request-body {
+  width: 100%;
 }
 </style>

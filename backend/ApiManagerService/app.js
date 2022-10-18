@@ -3,9 +3,11 @@ const mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var cors = require('cors')
 
+//Import routes
 const getAllCalls = require('./routes/allCalls')
 const scheduleCall = require('./routes/scheduleCall')
 
+//Connect to DB
 mongoose.connect('mongodb+srv://admin:admin@apicallmanager.gslzllt.mongodb.net/?retryWrites=true&w=majority')
 
 const app = express()
@@ -21,10 +23,6 @@ app.use(express.json());
 //Routes
 app.use('/calls',getAllCalls)
 app.use('/schedule',scheduleCall)
-
-// app.get('/',(req,res)=>{
-//     res.send('Hello world from Shariq!!!')
-// })
 
 app.listen(port, () => {
     console.log(`Api Call Manager Serivce running on port ${port}`)

@@ -1,7 +1,11 @@
 const apiCalls = require('../models/apiDef');
 const axios = require('axios');
 
-//Helper function to carry out service calls to given service endpoints depending on the method
+
+/**
+ * Helper function to carry out service calls to given service endpoints depending on the method
+ * @function
+ */
 const helperFuctionToMakeCalls = async (req, res, next) => {
     try {
         data = req.body
@@ -22,7 +26,7 @@ const helperFuctionToMakeCalls = async (req, res, next) => {
             await axios.delete(data.apiEndpoint, { headers: headers })
         }
         console.log("ds",data)
-        //Create a new Service call and store it to DB along with its response
+        //Create a new Service call  
         let call = new apiCalls({
             serviceId: data.serviceId,
             serviceName: data.serviceName,
@@ -35,6 +39,7 @@ const helperFuctionToMakeCalls = async (req, res, next) => {
             apiResponse: response.data
         });
 
+        // store it to DB along with its response
         let savedCall = await call.save();
 
         res.status(201).json({

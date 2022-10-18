@@ -1,42 +1,21 @@
 <template>
   <div id="app">
-    <RequestPage />
-    <ApiForm/>
-    <ApiResponse/>
+    <the-navigation></the-navigation>
+    <main>
+      <router-view></router-view>
+    </main>
   </div>
 </template>
 
 <script>
-import RequestPage from './components/RequestPage.vue'
-import ApiForm from './components/ApiForm.vue';
-import ApiResponse from './components/ApiResponse.vue'
+import TheNavigation from './components/TheNavigation.vue'
 
 export default {
   name: 'App',
   components: {
-    RequestPage,
-    ApiForm,
-    ApiResponse
+    TheNavigation,
   }
 }
-
-//Dummy Data
-
-// data = 
-//     {   "serviceId": 1,
-//         "serviceName": "Testing",
-//         "apiMethod": "POST",
-//         "apiEndpoint": "https://jsonplaceholder.typicode.com/todos",
-//         "apiHeaders": {
-//             'Content-Type': 'application/json'
-//         },
-//         "apiBody": {
-//             "title": "delectus aut autem",
-//             "completed": false
-//         },
-//         "apiExecuteNow":true,
-//         "dataTime": "2019-02-03T06:48:07"
-//     }
 
 </script>
 
@@ -48,9 +27,11 @@ export default {
 html {
   font-family: sans-serif;
 }
+
 body {
   margin: 0;
   background-color: grey;
+  
 }
 
 </style>

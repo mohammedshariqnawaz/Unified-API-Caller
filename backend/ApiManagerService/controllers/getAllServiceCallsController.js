@@ -1,5 +1,9 @@
 const apiCalls = require('../models/apiDef');
 
+
+/**
+ * Controller to get all service calls
+ */
 exports.getAllCalls = (req, res, next) => {
 
     //Find all service calls from DB
