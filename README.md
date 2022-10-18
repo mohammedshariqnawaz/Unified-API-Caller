@@ -57,6 +57,6 @@ List of available routes:
 }
 ```
 
-# API Endpoints Usage Screenshot with Frontend
+# Demo - API Endpoints Usage Screenshot with Frontend
 
 ![Screenshot](screenshots/frontend.png)
