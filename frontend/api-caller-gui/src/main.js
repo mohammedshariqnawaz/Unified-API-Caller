@@ -19,7 +19,7 @@ Vue.config.productionTip = false
 
 //Create routes
 const routes = [
-  { path: '/request', component: ApiForm },
+  { path: '/request', component: ApiForm,alias:'/' },
   { path: '/status', component: StatusPage }
 ]
 
