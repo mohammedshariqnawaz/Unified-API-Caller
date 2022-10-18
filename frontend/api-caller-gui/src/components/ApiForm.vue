@@ -1,6 +1,7 @@
 <template>
   <div class="main">
     <div class="left">
+
       <form @submit.prevent="submitForm">
         <div class="form-control">
           <label for="service-name">Service Name</label>
@@ -34,7 +35,6 @@
         <div class="form-control">
           <label for="headers">Headers</label>
 
-          <!-- <div id="headerpair" v-for="(pair,index) in keyValuePairs" :key="index"> -->
           <table>
             <tr>
               <td>
@@ -111,13 +111,13 @@
     <div class="right">
       <div id="responsesection">
         <label>Response</label>
-        <!-- <textarea
+        <textarea
           id="response-body"
           name="response-body"
           type="text"
           placeholder="Response Body"
-        ></textarea> -->
-          <!-- <p>{{responsedata}}</p> -->
+          v-model="response"
+        ></textarea>
       </div>
     </div>
   </div>
@@ -138,14 +138,17 @@ export default {
       headerValue: "",
       requestBody: "",
       datetime: null,
+      response:""
     };
   },
   methods: {
     async submitForm() {
+
+      //Testing Data
       // this.serviceName = "Test";
       // this.serviceEndpoint = "https://jsonplaceholder.typicode.com/todos/1";
       // this.apiMethod = "GET";
-      // // this.execute = '';
+      // this.execute = '';
       // this.headerKey = "Content-Type";
       // this.headerValue = "application/json; charset=UTF-8";
       // this.requestBody = `{ "title": "delectus aut autem","completed": false}`;
@@ -170,7 +173,6 @@ export default {
         apiExecuteNow: this.execute,
         dateTime: DateisoString,
       };
-      console.log("status",call.serviceId)
       
       let postrequest = await axios.post("http://localhost:3000/schedule/"+when, call ,{headers: { "Content-Type": "application/json" }})
       
@@ -179,14 +181,18 @@ export default {
         let getresponse = getrequest.data.apiCalls.find(ele=>  ele.serviceId === call.serviceId
         )
         console.log("Response",JSON.stringify(getresponse.apiResponse, null, 4))
+        this.response=JSON.stringify(getresponse.apiResponse, null, 4);
       }
-      this.serviceName = "Test";
-      this.serviceEndpoint = "https://jsonplaceholder.typicode.com/todos/5";
-      this.apiMethod = "GET";
-      this.execute = '';
-      this.headerKey = "Content-Type";
-      this.headerValue = "application/json; charset=UTF-8";
-      this.requestBody = `{ "title": "delectus aut autem","completed": false}`;
+
+      //Resetting values
+      // this.serviceName = "";
+      // this.serviceEndpoint = "";
+      // this.apiMethod = "";
+      // this.execute = '';
+      // this.headerKey = "";
+      // this.headerValue = "";
+      // this.requestBody = ``;
+      // this.datetime= null;
     },
     addElement() {
       console.log("check");

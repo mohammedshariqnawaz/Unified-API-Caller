@@ -14,13 +14,14 @@ const helperFuctionToMakeCalls = async (req, res, next) => {
         if (data.apiMethod === "GET") {
             response = await axios.get(data.apiEndpoint)
         } else if (data.apiMethod === "POST") {
+            console.log(data)
             response = await axios.post(data.apiEndpoint, data.apiBody, { headers: headers })
         } else if (data.apiMethod === "PUT") {
             response = await axios.put(data.apiEndpoint, data.apiBody, { headers: headers })
         } else if (data.apiMethod === "DELETE") {
             await axios.delete(data.apiEndpoint, { headers: headers })
         }
-
+        console.log("ds",data)
         //Create a new Service call and store it to DB along with its response
         let call = new apiCalls({
             serviceId: data.serviceId,

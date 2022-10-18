@@ -19,11 +19,14 @@ export default {
     ApiResponse
   }
 }
+
+//Dummy Data
+
 // data = 
 //     {   "serviceId": 1,
 //         "serviceName": "Testing",
-//         "apiMethod": "PUT",
-//         "apiEndpoint": "https://jsonplaceholder.typicode.com/todos/1",
+//         "apiMethod": "POST",
+//         "apiEndpoint": "https://jsonplaceholder.typicode.com/todos",
 //         "apiHeaders": {
 //             'Content-Type': 'application/json'
 //         },
