@@ -1,6 +1,6 @@
 ﻿# Unified-API-Caller
 
-Developed an microservice which makes service calls to specified services. Express.JS framework has been used to expose a RESTful API to make service calls.
+Developed an microservice which makes service calls to specified services. Express.JS framework has been used to expose a RESTful API to make service calls and Vue.js framework is used to create the user interface.
 
 Note :- Mock Services from [JSON Placeholder](https://jsonplaceholder.typicode.com/)  have been considered for this project to fake API for the pupose of testing and prototyping.  
 
