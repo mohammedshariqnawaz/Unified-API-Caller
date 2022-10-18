@@ -24,7 +24,7 @@ Steps to Follow:-
 
 ## Run Backend
 * Change directory using `cd .\backend\ApiManagerService`
-* Install required packages uisng `npm install`
+* Install required packages uisng `npm install` && `npm install nodemon` && `npm install node-schedule`
 * Run `npm start` to make backend available on `https://localhost:3000/`
 
 ## Run Frontend 
